@@ -1,0 +1,16 @@
+.conventional-comment-button svg {
+  vertical-align: text-bottom;
+}
+
+.conventional-comment-blocking {
+  color: #ae0000 !important;
+}
+
+.conventional-comment-blocking:hover {
+  color: #ff0000 !important;
+}
+
+.conventional-comment-wrapper {
+  display: flex;
+  margin-left: 16px;
+}
