@@ -1,16 +1,16 @@
 export const buttons = {
   praise: {
-    title: 'praise'
+    label: 'Praise'
   },
   suggestion: {
-    title: 'suggestion'
+    label: 'Suggestion'
   },
   nitpick: {
-    title: 'nitpick',
+    label: 'Nitpick',
     hasBlocking: true
   },
   question: {
-    title: 'question',
+    label: 'Question',
     hasBlocking: true
   }
 }

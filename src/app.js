@@ -1,8 +1,6 @@
 import { buttons as btnConfigs } from './buttons.js'
 import * as icons from './icons.js'
 
-const upperFirst = str => str.charAt(0).toUpperCase() + str.slice(1)
-
 const buttonClass = [
   'toolbar-item',
   'tooltipped',
@@ -10,11 +8,11 @@ const buttonClass = [
   'conventional-comment-button'
 ]
 
-const buttons = Object.values(btnConfigs).reduce((result, { title, hasBlocking }) => {
+const buttons = Object.entries(btnConfigs).reduce((result, [title, { label, hasBlocking }]) => {
   const button = document.createElement('div')
   button.classList.add(...buttonClass)
   button.setAttribute('data-title', title)
-  button.setAttribute('aria-label', upperFirst(title))
+  button.setAttribute('aria-label', label)
   button.innerHTML = icons[title]
   result.push(button)
 
@@ -22,15 +20,16 @@ const buttons = Object.values(btnConfigs).reduce((result, { title, hasBlocking }
     const blocking = button.cloneNode(true)
     blocking.classList.add('conventional-comment-blocking')
     blocking.setAttribute('data-blocking', true)
-    blocking.setAttribute('aria-label', `${upperFirst(title)} (blocking)`)
+    blocking.setAttribute('aria-label', `${label} (blocking)`)
     result.push(blocking)
   }
 
   return result
 }, [])
 
-const getValueWithComment = (title, blocking, str) => {
-  const decorator = !btnConfigs[title].hasBlocking ? '' : blocking ? ' (blocking)' : ' (non-blocking)'
+const getDecorator = (title, blocking) => !btnConfigs[title].hasBlocking ? '' : blocking ? ' (blocking)' : ' (non-blocking)'
+
+const getValueWithComment = (title, decorator, str) => {
   const comment = `**${title}${decorator}:** `
   return comment + str.replace(/\*\*.+?\*\*\s/, '')
 }
@@ -44,7 +43,8 @@ const process = (form) => {
     button.onclick = (e) => {
       e.preventDefault()
       const { title, blocking } = button.dataset
-      textarea.value = getValueWithComment(title, blocking, textarea.value)
+      const decorator = getDecorator(title, blocking)
+      textarea.value = getValueWithComment(title, decorator, textarea.value)
     }
     wrapper.appendChild(button)
   })
