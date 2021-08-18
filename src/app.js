@@ -11,6 +11,7 @@ const buttonClass = [
 const buttons = Object.entries(btnConfigs).reduce((result, [title, { label, hasBlocking }]) => {
   const button = document.createElement('div')
   button.classList.add(...buttonClass)
+  button.setAttribute('data-decorator', '')
   button.setAttribute('data-title', title)
   button.setAttribute('aria-label', label)
   button.innerHTML = icons[title]
@@ -18,8 +19,10 @@ const buttons = Object.entries(btnConfigs).reduce((result, [title, { label, hasB
 
   if (hasBlocking) {
     const blocking = button.cloneNode(true)
+    button.setAttribute('data-decorator', ' (non-blocking)')
+    blocking.setAttribute('data-decorator', ' (blocking)')
+
     blocking.classList.add('conventional-comment-blocking')
-    blocking.setAttribute('data-blocking', true)
     blocking.setAttribute('aria-label', `${label} (blocking)`)
     result.push(blocking)
   }
@@ -27,34 +30,35 @@ const buttons = Object.entries(btnConfigs).reduce((result, [title, { label, hasB
   return result
 }, [])
 
-const getDecorator = (title, blocking) => !btnConfigs[title].hasBlocking ? '' : blocking ? ' (blocking)' : ' (non-blocking)'
-
 const getValueWithComment = (title, decorator, str) => {
   const comment = `**${title}${decorator}:** `
   return comment + str.replace(/\*\*.+?\*\*\s/, '')
 }
 
 const process = (form) => {
+  if (!form.offsetParent) {
+    return
+  }
   const textarea = form.querySelector('textarea')
-  const toolbar = form.querySelector('markdown-toolbar')
+
   const wrapper = document.createElement('div')
   wrapper.classList.add('conventional-comment-wrapper')
   buttons.forEach(button => {
-    button.onclick = (e) => {
+    const copy = button.cloneNode(true)
+    wrapper.appendChild(copy)
+    copy.onclick = (e) => {
       e.preventDefault()
-      const { title, blocking } = button.dataset
-      const decorator = getDecorator(title, blocking)
+      const { title, decorator } = button.dataset
       textarea.value = getValueWithComment(title, decorator, textarea.value)
+      textarea.focus()
     }
-    wrapper.appendChild(button)
   })
-  toolbar.appendChild(wrapper)
+  form.appendChild(wrapper)
+
+  form.dataset.semanticButtonInitialized = 'true'
 }
 
 export const run = () => {
-  document.querySelectorAll('.js-new-comment-form:not([data-semantic-button-initialized])')
-    .forEach(form => {
-      form.dataset.semanticButtonInitialized = 'true'
-      process(form)
-    })
+  document.querySelectorAll('tab-container:not([data-semantic-button-initialized])')
+    .forEach(process)
 }

@@ -12,5 +12,15 @@ export const buttons = {
   question: {
     label: 'Question',
     hasBlocking: true
+  },
+  chore: {
+    label: 'Chore',
+    hasBlocking: true
+  },
+  issue: {
+    label: 'Issue'
+  },
+  thought: {
+    label: 'Thought'
   }
 }
