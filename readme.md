@@ -9,8 +9,9 @@ The [original license](https://gitlab.com/conventionalcomments/conventional-comm
 
 ### Installation
 1. Clone this repository
-2. Go to your chrome extensions (enter `chrome://extensions/` in the address bar)
-3. Toggle Developer mode (on the right top corner)
-4. Click "Load unpacked"
-5. Select the repository folder
-6. Reload github
+2. Run `npm install` and `npm run build`
+3. Go to your chrome extensions (enter `chrome://extensions/` in the address bar)
+4. Toggle Developer mode (on the right top corner)
+5. Click "Load unpacked"
+6. Select the repository folder
+7. Reload github
