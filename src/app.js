@@ -1,5 +1,4 @@
 import { buttons as btnConfigs } from './buttons.js'
-import * as icons from './icons.js'
 
 const buttonClass = [
   'toolbar-item',
@@ -8,19 +7,18 @@ const buttonClass = [
   'conventional-comment-button'
 ]
 
-const buttons = Object.entries(btnConfigs).reduce((result, [title, { label, hasBlocking }]) => {
+const buttons = btnConfigs.reduce((result, { label, icon, hasBlocking }) => {
   const button = document.createElement('div')
   button.classList.add(...buttonClass)
-  button.setAttribute('data-decorator', '')
-  button.setAttribute('data-title', title)
+  button.setAttribute('data-comment', `**${label}:** `)
   button.setAttribute('aria-label', label)
-  button.innerHTML = icons[title]
+  button.innerHTML = icon
   result.push(button)
 
   if (hasBlocking) {
     const blocking = button.cloneNode(true)
-    button.setAttribute('data-decorator', ' (non-blocking)')
-    blocking.setAttribute('data-decorator', ' (blocking)')
+    button.setAttribute('data-comment', `**${label} (non-blocking):** `)
+    blocking.setAttribute('data-comment', `**${label} (blocking):** `)
 
     blocking.classList.add('conventional-comment-blocking')
     blocking.setAttribute('aria-label', `${label} (blocking)`)
@@ -30,8 +28,7 @@ const buttons = Object.entries(btnConfigs).reduce((result, [title, { label, hasB
   return result
 }, [])
 
-const getValueWithComment = (title, decorator, str) => {
-  const comment = `**${title}${decorator}:** `
+const getValueWithComment = (comment, str) => {
   return comment + str.replace(/\*\*.+?\*\*\s/, '')
 }
 
@@ -48,8 +45,8 @@ const process = (form) => {
     wrapper.appendChild(copy)
     copy.onclick = (e) => {
       e.preventDefault()
-      const { title, decorator } = button.dataset
-      textarea.value = getValueWithComment(title, decorator, textarea.value)
+      const { comment } = button.dataset
+      textarea.value = getValueWithComment(comment, textarea.value)
       textarea.focus()
     }
   })

@@ -1,26 +1,35 @@
-export const buttons = {
-  praise: {
-    label: 'Praise'
+import * as icons from './icons.js'
+
+export const buttons = [
+  {
+    label: 'Praise',
+    icon: icons.praise
   },
-  suggestion: {
-    label: 'Suggestion'
+  {
+    label: 'Suggestion',
+    icon: icons.suggestion
   },
-  nitpick: {
+  {
     label: 'Nitpick',
+    icon: icons.nitpick,
     hasBlocking: true
   },
-  question: {
+  {
     label: 'Question',
+    icon: icons.question,
     hasBlocking: true
   },
-  chore: {
+  {
     label: 'Chore',
+    icon: icons.chore,
     hasBlocking: true
   },
-  issue: {
-    label: 'Issue'
+  {
+    label: 'Issue',
+    icon: icons.issue
   },
-  thought: {
-    label: 'Thought'
+  {
+    label: 'Thought',
+    icon: icons.thought
   }
-}
+]

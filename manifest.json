@@ -2,13 +2,12 @@
   "manifest_version": 3,
   "name": "Conventional Comments",
   "description": "Adds conventional comment shortcuts to the comment editor.",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "content_scripts": [
     {
       "matches": ["*://github.com/**/pull/*"],
       "css": ["src/style.css"],
-      "js": ["src/index.js"],
-      "run_at": "document_idle"
+      "js": ["src/index.js"]
     }
   ],
   "web_accessible_resources": [
@@ -24,6 +23,5 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  },
-  "host_permissions": ["*://*/*"]
+  }
 }
