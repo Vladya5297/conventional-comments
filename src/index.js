@@ -1,6 +1,6 @@
 import { buttons as btnConfigs } from './buttons.js'
 
-const buttonClass = [
+const buttonClasses = [
   'toolbar-item',
   'tooltipped',
   'tooltipped-sw',
@@ -9,7 +9,7 @@ const buttonClass = [
 
 const buttons = btnConfigs.reduce((result, { label, icon, hasBlocking }) => {
   const button = document.createElement('div')
-  button.classList.add(...buttonClass)
+  button.classList.add(...buttonClasses)
   button.setAttribute('data-comment', `**${label}:** `)
   button.setAttribute('aria-label', label)
   button.innerHTML = icon
@@ -28,6 +28,11 @@ const buttons = btnConfigs.reduce((result, { label, icon, hasBlocking }) => {
   return result
 }, [])
 
+const wrapperClasses = [
+  'border-md',
+  'conventional-comment-wrapper'
+]
+
 const getValueWithComment = (comment, str) => {
   return comment + str.replace(/\*\*.+?\*\*\s/, '')
 }
@@ -39,7 +44,7 @@ const process = (form) => {
   const textarea = form.querySelector('textarea')
 
   const wrapper = document.createElement('div')
-  wrapper.classList.add('conventional-comment-wrapper')
+  wrapper.classList.add(...wrapperClasses)
   buttons.forEach(button => {
     const copy = button.cloneNode(true)
     wrapper.appendChild(copy)
@@ -52,12 +57,19 @@ const process = (form) => {
   })
   form.appendChild(wrapper)
 
-  form.dataset.semanticButtonInitialized = 'true'
+  form.dataset.semanticButtonsInitialized = 'true'
 }
 
 const run = () => {
-  document.querySelectorAll('tab-container:not([data-semantic-button-initialized])')
+  document
+    .querySelectorAll('form tab-container:not([data-semantic-buttons-initialized])')
     .forEach(process)
 }
 
-setInterval(run, 300)
+const location = new URL(window.location.href)
+if (
+  location.hostname.startsWith('github') &&
+  location.pathname.includes('pull')
+) {
+  setInterval(run, 300)
+}
