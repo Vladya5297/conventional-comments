@@ -1,36 +1,7 @@
-import { buttons as buttonsMeta } from './buttons.js'
-
-const buttonClasses = [
-  'toolbar-item',
-  'tooltipped',
-  'tooltipped-sw',
-  'btn-octicon',
-  'conventional-comment-button'
-]
-
-const buttons = buttonsMeta.reduce((result, { label, icon, hasBlocking }) => {
-  const button = document.createElement('div')
-  button.classList.add(...buttonClasses)
-  button.setAttribute('data-comment', `**${label}:** `)
-  button.setAttribute('aria-label', label)
-  button.innerHTML = icon
-  result.push(button)
-
-  if (hasBlocking) {
-    const blocking = button.cloneNode(true)
-    button.setAttribute('data-comment', `**${label} (non-blocking):** `)
-    blocking.setAttribute('data-comment', `**${label} (blocking):** `)
-
-    blocking.classList.add('conventional-comment-blocking')
-    blocking.setAttribute('aria-label', `${label} (blocking)`)
-    result.push(blocking)
-  }
-
-  return result
-}, [])
+import { getButtons } from './buttons.js'
 
 const wrapperClasses = [
-  'border-md',
+  'border',
   'conventional-comment-wrapper'
 ]
 
@@ -40,18 +11,19 @@ const getValueWithComment = (comment, str) => {
 
 const process = (root) => {
   const textarea = root.querySelector('textarea')
+
   const buttonsWrapper = document.createElement('div')
   buttonsWrapper.classList.add(...wrapperClasses)
-  buttons.forEach(button => {
-    const clone = button.cloneNode(true)
-    buttonsWrapper.appendChild(clone)
-    clone.onclick = (e) => {
-      e.preventDefault()
-      const { comment } = button.dataset
-      textarea.value = getValueWithComment(comment, textarea.value)
-      textarea.focus()
-    }
-  })
+
+  const onClick = (e, button) => {
+    e.preventDefault()
+    const { comment } = button.dataset
+    textarea.value = getValueWithComment(comment, textarea.value)
+    textarea.focus()
+  }
+  const buttons = getButtons(onClick)
+  buttons.forEach(button => { buttonsWrapper.appendChild(button) })
+
   root.appendChild(buttonsWrapper)
   root.dataset.semanticButtonsInitialized = true
 }
@@ -69,5 +41,6 @@ if (
   location.hostname.startsWith('github') &&
   location.pathname.includes('pull')
 ) {
-  setInterval(run, 300)
+  run()
+  document.addEventListener('click', run)
 }
