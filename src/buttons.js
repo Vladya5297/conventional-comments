@@ -2,34 +2,34 @@ import * as icons from './icons.js'
 
 export const buttons = [
   {
-    label: 'Praise',
+    label: 'praise',
     icon: icons.praise
   },
   {
-    label: 'Suggestion',
+    label: 'suggestion',
     icon: icons.suggestion
   },
   {
-    label: 'Nitpick',
+    label: 'nitpick',
     icon: icons.nitpick,
     hasBlocking: true
   },
   {
-    label: 'Question',
+    label: 'question',
     icon: icons.question,
     hasBlocking: true
   },
   {
-    label: 'Chore',
+    label: 'chore',
     icon: icons.chore,
     hasBlocking: true
   },
   {
-    label: 'Issue',
+    label: 'issue',
     icon: icons.issue
   },
   {
-    label: 'Thought',
+    label: 'thought',
     icon: icons.thought
   }
 ]

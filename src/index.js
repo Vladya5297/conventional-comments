@@ -1,13 +1,14 @@
-import { buttons as btnConfigs } from './buttons.js'
+import { buttons as buttonsMeta } from './buttons.js'
 
 const buttonClasses = [
   'toolbar-item',
   'tooltipped',
   'tooltipped-sw',
+  'btn-octicon',
   'conventional-comment-button'
 ]
 
-const buttons = btnConfigs.reduce((result, { label, icon, hasBlocking }) => {
+const buttons = buttonsMeta.reduce((result, { label, icon, hasBlocking }) => {
   const button = document.createElement('div')
   button.classList.add(...buttonClasses)
   button.setAttribute('data-comment', `**${label}:** `)
@@ -37,32 +38,29 @@ const getValueWithComment = (comment, str) => {
   return comment + str.replace(/\*\*.+?\*\*\s/, '')
 }
 
-const process = (form) => {
-  if (!form.offsetParent) {
-    return
-  }
-  const textarea = form.querySelector('textarea')
-
-  const wrapper = document.createElement('div')
-  wrapper.classList.add(...wrapperClasses)
+const process = (root) => {
+  const textarea = root.querySelector('textarea')
+  const buttonsWrapper = document.createElement('div')
+  buttonsWrapper.classList.add(...wrapperClasses)
   buttons.forEach(button => {
-    const copy = button.cloneNode(true)
-    wrapper.appendChild(copy)
-    copy.onclick = (e) => {
+    const clone = button.cloneNode(true)
+    buttonsWrapper.appendChild(clone)
+    clone.onclick = (e) => {
       e.preventDefault()
       const { comment } = button.dataset
       textarea.value = getValueWithComment(comment, textarea.value)
       textarea.focus()
     }
   })
-  form.appendChild(wrapper)
-
-  form.dataset.semanticButtonsInitialized = 'true'
+  root.appendChild(buttonsWrapper)
+  root.dataset.semanticButtonsInitialized = true
 }
+
+const ROOT_SELECTOR = 'file-attachment'
 
 const run = () => {
   document
-    .querySelectorAll('form tab-container:not([data-semantic-buttons-initialized])')
+    .querySelectorAll(`${ROOT_SELECTOR}:not([data-semantic-buttons-initialized])`)
     .forEach(process)
 }
 

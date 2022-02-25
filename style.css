@@ -1,3 +1,7 @@
+.conventional-comment-button {
+    margin: 0 !important;
+}
+
 .conventional-comment-button svg {
   vertical-align: text-bottom;
 }
