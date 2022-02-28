@@ -9,8 +9,8 @@ const getValueWithComment = (comment, str) => {
   return comment + str.replace(/\*\*.+?\*\*\s/, '')
 }
 
-const process = (root) => {
-  const textarea = root.querySelector('textarea')
+const process = (textarea) => {
+  const root = textarea.closest('file-attachment')
 
   const buttonsWrapper = document.createElement('div')
   buttonsWrapper.classList.add(...wrapperClasses)
@@ -25,14 +25,14 @@ const process = (root) => {
   buttons.forEach(button => { buttonsWrapper.appendChild(button) })
 
   root.appendChild(buttonsWrapper)
-  root.dataset.semanticButtonsInitialized = true
+  textarea.dataset.semanticButtonsInitialized = true
 }
 
-const ROOT_SELECTOR = 'file-attachment'
+const TEXTAREA_SELECTOR = 'textarea[placeholder="Leave a comment"]'
 
 const run = () => {
   document
-    .querySelectorAll(`${ROOT_SELECTOR}:not([data-semantic-buttons-initialized])`)
+    .querySelectorAll(`${TEXTAREA_SELECTOR}:not([data-semantic-buttons-initialized])`)
     .forEach(process)
 }
 
