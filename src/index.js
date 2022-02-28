@@ -10,6 +10,9 @@ const getValueWithComment = (comment, str) => {
 }
 
 const process = (textarea) => {
+  // check if textarea visible
+  if (!textarea.offsetParent) return
+
   const root = textarea.closest('file-attachment')
 
   const buttonsWrapper = document.createElement('div')
@@ -41,6 +44,6 @@ if (
   location.hostname.startsWith('github') &&
   location.pathname.includes('pull')
 ) {
-  run()
-  document.addEventListener('click', run)
+  const observer = new MutationObserver(run)
+  observer.observe(document.body, { attributes: true, subtree: true, childList: true })
 }
